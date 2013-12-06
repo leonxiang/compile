@@ -53,19 +53,36 @@ public abstract class BaseParser {
 	 * @return 该操作符的字符串形式
 	 */
 	public static String opStr(int opCode) {
-		switch (opCode) {
-		case Parser.AND:
+		switch (opCode) {	//leon 移植自PA2
+		case Tree.AND:
 			return "&&";
-		case Parser.EQUAL:
+		case Tree.EQ:
 			return "==";
-		case Parser.GREATER_EQUAL:
+		case Tree.GE:
 			return ">=";
-		case Parser.LESS_EQUAL:
+		case Tree.LE:
 			return "<=";
-		case Parser.NOT_EQUAL:
+		case Tree.NE:
 			return "!=";
-		case Parser.OR:
+		case Tree.OR:
 			return "||";
+		case Tree.PLUS:
+			return "+";
+		case Tree.MINUS:
+		case Tree.NEG:
+			return "-";
+		case Tree.MUL:
+			return "*";
+		case Tree.DIV:
+			return "/";
+		case Tree.MOD:
+			return "%";
+		case Tree.LT:
+			return "<";
+		case Tree.GT:
+			return ">";
+		case Tree.NOT:
+			return "!";
 		default:
 			return "" + (char) opCode;
 		}

@@ -59,6 +59,7 @@ public abstract class BaseLexer {
 		}
 		return Parser.LITERAL;
 	}
+	//leon 删去了PA2中添加的doubleconst
 
 	protected int identifier(String name) {
 		setSemantic(getLocation(), SemValue.createIdentifier(name));

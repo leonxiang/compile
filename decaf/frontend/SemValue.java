@@ -146,9 +146,7 @@ public class SemValue {
 		case Parser.INT:
 			msg = "keyword  : int";
 			break;
-		case Parser.INSTANCEOF:
-			msg = "keyword  : instanceof";
-			break;
+		//leon 删去instanceof
 		case Parser.NEW:
 			msg = "keyword  : new";
 			break;
@@ -182,6 +180,14 @@ public class SemValue {
 		case Parser.STATIC:
 			msg = "keyword : static";
 			break;
+		case Parser.REPEAT:
+			msg = "keyword : repeat";
+			break;
+		case Parser.UNTIL:
+			msg = "keyword : until";
+			break;
+
+		//Leon 又删去了keyword：double
 
 		// 常量
 		case Parser.LITERAL:

@@ -36,9 +36,11 @@ HEX_DIGIT 			= ([0-9A-Fa-f])
 HEX_INTEGER			= (0[Xx]{HEX_DIGIT}+)
 DEC_INTEGER			= ({DIGIT}+)
 INTEGER				= ({HEX_INTEGER}|{DEC_INTEGER})
+
 IDENTIFIER			= ([A-Za-z][_0-9A-Za-z]*)
 SIMPLE_OPERATOR		= ("+"|"-"|"*"|"/"|"%"|"="|"<"|">"|"."|","|";"|"!"|"("|")"|"["|"]"|"{"|"}")
 S_COMMENT			= ("//"[^\r\n]*{NEWLINE})
+
 WHITESPACE			= ([ \t]+)
 
 	// 开始条件S表示字符串
@@ -56,6 +58,7 @@ WHITESPACE			= ([ \t]+)
 "int"				{ return keyword(Parser.INT);			}
 "bool"				{ return keyword(Parser.BOOL);			}
 "string"			{ return keyword(Parser.STRING);		}
+
 "new"				{ return keyword(Parser.NEW);			}
 "null"				{ return keyword(Parser.NULL);			}
 "class"				{ return keyword(Parser.CLASS);			}
@@ -71,7 +74,9 @@ WHITESPACE			= ([ \t]+)
 "ReadInteger"		{ return keyword(Parser.READ_INTEGER);	}
 "ReadLine"			{ return keyword(Parser.READ_LINE);		}
 "static"			{ return keyword(Parser.STATIC);		}
-"instanceof"		{ return keyword(Parser.INSTANCEOF);	}
+"repeat"			{return keyword(Parser.REPEAT);			}
+"until"				{return keyword(Parser.UNTIL);			}
+
 
 	// 识别操作符的规则
 "<="				{ return operator(Parser.LESS_EQUAL);	}
@@ -86,6 +91,7 @@ WHITESPACE			= ([ \t]+)
 "true"				{ return boolConst(true);										}
 "false"				{ return boolConst(false);										}
 {INTEGER}			{ return intConst(yytext());			}
+
 <YYINITIAL>\"		{ sloc = getLocation();		  
 					  yybegin(S);
 					  buffer = new StringBuilder();								    }

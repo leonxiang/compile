@@ -90,10 +90,15 @@ public abstract class Tree {
     public static final int WHILELOOP = DOLOOP + 1;
 
     /**
+     * Repeat-loops, of type RepeatLoop
+     */
+    public static final int REPEATLOOP=WHILELOOP+1;//leon 移植自PA2
+
+    /**
      * For-loops, of type ForLoop.
      */
-    public static final int FORLOOP = WHILELOOP + 1;
-
+    public static final int FORLOOP = REPEATLOOP + 1;
+    
     /**
      * Labelled statements, of type Labelled.
      */
@@ -303,7 +308,7 @@ public abstract class Tree {
     public static final int INT = VOID + 1; 
     public static final int BOOL = INT + 1; 
     public static final int STRING = BOOL + 1; 
-
+	//leon 未接受PA2增加DOUBLE
 
     public Location loc;
     public Type type;
@@ -542,6 +547,41 @@ public abstract class Tree {
     		pw.decIndent();
     	}
    }
+  
+    /**
+     * A repeat loop
+     * --Leon 移植自PA2
+     */
+    public static class RepeatLoop extends Tree{
+
+    	public Expr condition;
+    	public Tree loopBody;
+    	
+		public RepeatLoop( Expr condition, Tree loopBody, Location loc) {
+			super(REPEATLOOP, loc);
+			this.condition = condition;
+            this.loopBody = loopBody;	
+		}
+		
+		
+		 public void accept(Visitor v) {
+	            v.visitRepeatLoop(this);
+	        }
+
+		@Override
+		public void printTo(IndentPrintWriter pw) {
+			pw.println("repeatLoop");
+    		pw.incIndent();
+    		if (loopBody != null) {
+    			loopBody.printTo(pw);
+    		}
+    		
+    		condition.printTo(pw);
+    		pw.decIndent();
+			
+		}
+    	
+    }
 
     /**
       * A for loop.
@@ -1079,7 +1119,9 @@ public abstract class Tree {
     		pw.println("this");
     	}
    }
-
+	
+	//leon 删去 instanceof TypeTest
+	
     /**
       * A type cast.
       */
@@ -1110,35 +1152,7 @@ public abstract class Tree {
     	}
     }
 
-    /**
-      * instanceof expression
-      */
-    public static class TypeTest extends Expr {
-    	
-    	public Expr instance;
-    	public String className;
-    	public Class symbol;
-
-        public TypeTest(Expr instance, String className, Location loc) {
-            super(TYPETEST, loc);
-    		this.instance = instance;
-    		this.className = className;
-        }
-
-    	@Override
-        public void accept(Visitor v) {
-            v.visitTypeTest(this);
-        }
-
-    	@Override
-    	public void printTo(IndentPrintWriter pw) {
-    		pw.println("instanceof");
-    		pw.incIndent();
-    		instance.printTo(pw);
-    		pw.println(className);
-    		pw.decIndent();
-    	}
-    }
+ 
 
     /**
       * An array selection
@@ -1230,6 +1244,7 @@ public abstract class Tree {
     		case BOOL:
     			pw.println("boolconst " + value);
     			break;
+			//leon 删去增加的double
     		default:
     			pw.println("stringconst " + MiscUtils.quote((String)value));
     		}
@@ -1292,6 +1307,7 @@ public abstract class Tree {
     		case VOID:
     			pw.print("voidtype");
     			break;
+			//leon 删去增加的double
     		default:
     			pw.print("stringtype");
     		}
@@ -1379,6 +1395,14 @@ public abstract class Tree {
             visitTree(that);
         }
 
+        /**
+         *Leon
+         * @param that
+         */
+        public void visitRepeatLoop(RepeatLoop that){
+        	visitTree(that);
+        }
+        
         public void visitForLoop(ForLoop that) {
             visitTree(that);
         }
@@ -1451,9 +1475,13 @@ public abstract class Tree {
             visitTree(that);
         }
 
-        public void visitTypeTest(TypeTest that) {
-            visitTree(that);
-        }
+        /**
+         * Leon delete instanceof
+         * @param that
+         */
+//        public void visitTypeTest(TypeTest that) {
+//            visitTree(that);
+//        }
 
         public void visitIndexed(Indexed that) {
             visitTree(that);

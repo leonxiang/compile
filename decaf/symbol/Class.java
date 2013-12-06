@@ -1,5 +1,6 @@
 package decaf.symbol;
 
+
 import java.util.Iterator;
 
 import decaf.Driver;
@@ -9,6 +10,7 @@ import decaf.scope.ClassScope;
 import decaf.scope.GlobalScope;
 import decaf.tac.Label;
 import decaf.tac.VTable;
+
 import decaf.type.ClassType;
 
 public class Class extends Symbol {

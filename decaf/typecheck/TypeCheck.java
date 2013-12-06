@@ -70,6 +70,7 @@ public class TypeCheck extends Tree.Visitor {
 		expr.expr.accept(this);
 		if(expr.tag == Tree.NEG){
 			if (expr.expr.type.equal(BaseType.ERROR)
+
 					|| expr.expr.type.equal(BaseType.INT)) {
 				expr.type = expr.expr.type;
 			} else {
@@ -156,6 +157,7 @@ public class TypeCheck extends Tree.Visitor {
 				issueError(new RefNonStaticError(callExpr.getLocation(),
 						currentFunction.getName(), func.getName()));
 			}
+
 			if (!func.isStatik() && callExpr.receiver != null
 					&& callExpr.receiver.isClass) {
 				issueError(new NotClassFieldError(callExpr.getLocation(),
@@ -195,6 +197,7 @@ public class TypeCheck extends Tree.Visitor {
 					}
 				}
 			}
+
 		}
 	}
 
@@ -262,6 +265,7 @@ public class TypeCheck extends Tree.Visitor {
 				&& !newArrayExpr.length.type.equal(BaseType.INT)) {
 			issueError(new BadNewArrayLength(newArrayExpr.length.getLocation()));
 		}
+
 	}
 
 	@Override
@@ -285,22 +289,6 @@ public class TypeCheck extends Tree.Visitor {
 		} else {
 			thisExpr.type = ((ClassScope) table.lookForScope(Scope.Kind.CLASS))
 					.getOwner().getType();
-		}
-	}
-
-	@Override
-	public void visitTypeTest(Tree.TypeTest instanceofExpr) {
-		instanceofExpr.instance.accept(this);
-		if (!instanceofExpr.instance.type.isClassType()) {
-			issueError(new NotClassError(instanceofExpr.instance.type
-					.toString(), instanceofExpr.getLocation()));
-		}
-		Class c = table.lookupClass(instanceofExpr.className);
-		instanceofExpr.symbol = c;
-		instanceofExpr.type = BaseType.BOOL;
-		if (c == null) {
-			issueError(new ClassNotFoundError(instanceofExpr.getLocation(),
-					instanceofExpr.className));
 		}
 	}
 
@@ -331,6 +319,7 @@ public class TypeCheck extends Tree.Visitor {
 				issueError(new UndeclVarError(ident.getLocation(), ident.name));
 				ident.type = BaseType.ERROR;
 			} else if (v.isVariable()) {
+<<<<<<< HEAD
 				Variable var = (Variable) v;
 				ident.type = var.getType();
 				ident.symbol = var;
@@ -446,10 +435,12 @@ public class TypeCheck extends Tree.Visitor {
 					assign.left.type.toString(), "=", assign.expr.type
 							.toString()));
 		}
+
 	}
 
 	@Override
 	public void visitBreak(Tree.Break breakStmt) {
+
 		if (breaks.empty()) {
 			issueError(new BreakOutOfLoopError(breakStmt.getLocation()));
 		}
@@ -472,6 +463,22 @@ public class TypeCheck extends Tree.Visitor {
 	}
 
 	@Override
+
+	public void visitRepeatLoop(Tree.RepeatLoop repeatLoop) {
+		// TODO
+		// repeat循环。参考visitWhileLoop，自行修改Tree，
+		//Leon
+		breaks.add(repeatLoop);
+		if (repeatLoop.loopBody != null) {
+			repeatLoop.loopBody.accept(this);
+		}
+		checkTestExpr(repeatLoop.condition);
+		breaks.pop();
+		
+	}
+
+	@Override
+
 	public void visitIf(Tree.If ifStmt) {
 		checkTestExpr(ifStmt.condition);
 		if (ifStmt.trueBranch != null) {
@@ -488,6 +495,7 @@ public class TypeCheck extends Tree.Visitor {
 		for (Tree.Expr e : printStmt.exprs) {
 			e.accept(this);
 			i++;
+
 			if (!e.type.equal(BaseType.ERROR) && !e.type.equal(BaseType.BOOL)
 					&& !e.type.equal(BaseType.INT)
 					&& !e.type.equal(BaseType.STRING)) {
@@ -499,11 +507,13 @@ public class TypeCheck extends Tree.Visitor {
 
 	@Override
 	public void visitReturn(Tree.Return returnStmt) {
+
 		Type returnType = ((FormalScope) table
 				.lookForScope(Scope.Kind.FORMAL)).getOwner().getReturnType();
 		if (returnStmt.expr != null) {
 			returnStmt.expr.accept(this);
 		}
+
 		if (returnType.equal(BaseType.VOID)) {
 			if (returnStmt.expr != null) {
 				issueError(new BadReturnTypeError(returnStmt.getLocation(),
@@ -517,6 +527,7 @@ public class TypeCheck extends Tree.Visitor {
 			issueError(new BadReturnTypeError(returnStmt.getLocation(),
 					returnType.toString(), returnStmt.expr.type.toString()));
 		}
+
 	}
 
 	@Override
@@ -601,10 +612,12 @@ public class TypeCheck extends Tree.Visitor {
 		case Tree.MINUS:
 		case Tree.MUL:
 		case Tree.DIV:
+
 			compatible = left.type.equals(BaseType.INT)
 					&& left.type.equal(right.type);
 			returnType = left.type;
 			break;
+
 		case Tree.GT:
 		case Tree.GE:
 		case Tree.LT:
@@ -630,6 +643,7 @@ public class TypeCheck extends Tree.Visitor {
 					&& right.type.equal(BaseType.BOOL);
 			returnType = BaseType.BOOL;
 			break;
+
 		default:
 			break;
 		}

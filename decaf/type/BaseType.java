@@ -20,6 +20,10 @@ public class BaseType extends Type {
 	
 	public static final BaseType VOID = new BaseType("void");
 
+	//leon 删去增加的double
+	//public static final BaseType DOUBLE = new BaseType("double");
+
+
 	@Override
 	public boolean isBaseType() {
 		return true;

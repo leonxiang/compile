@@ -24,12 +24,13 @@ import java.util.*;
 %Jnodebug
 %Jnoconstruct
 
-%token VOID   BOOL  INT   STRING  CLASS 
+%token VOID   BOOL  INT   STRING   CLASS 
 %token NULL   EXTENDS     THIS     WHILE   FOR   
 %token IF     ELSE        RETURN   BREAK   NEW
 %token PRINT  READ_INTEGER         READ_LINE
-%token LITERAL
-%token IDENTIFIER	  AND    OR    STATIC  INSTANCEOF
+%token LITERAL  
+%token IDENTIFIER	  AND    OR    STATIC  REPEAT UNTIL
+
 %token LESS_EQUAL   GREATER_EQUAL  EQUAL   NOT_EQUAL
 %token '+'  '-'  '*'  '/'  '%'  '='  '>'  '<'  '.'
 %token ','  ';'  '!'  '('  ')'  '['  ']'  '{'  '}'
@@ -190,6 +191,7 @@ Stmt		    :	VariableDef
                 	}
                 |	IfStmt
                 |	WhileStmt
+                |	RepeatStmt ';'
                 |	ForStmt
                 |	ReturnStmt ';'
                 |	PrintStmt ';'
@@ -330,10 +332,6 @@ Expr            :	LValue
                 	{
                 		$$.expr = new Tree.NewArray($2.type, $4.expr, $1.loc);
                 	}
-                |	INSTANCEOF '(' Expr ',' IDENTIFIER ')'
-                	{
-                		$$.expr = new Tree.TypeTest($3.expr, $5.ident, $1.loc);
-                	}
                 |	'(' CLASS IDENTIFIER ')' Expr
                 	{
                 		$$.expr = new Tree.TypeCast($3.ident, $5.expr, $5.loc);
@@ -374,6 +372,12 @@ WhileStmt       :	WHILE '(' Expr ')' Stmt
 						$$.stmt = new Tree.WhileLoop($3.expr, $5.stmt, $1.loc);
 					}
                 ;
+ 
+RepeatStmt		:	REPEAT Stmt UNTIL '(' Expr ')'
+					{
+						$$.stmt = new Tree.RepeatLoop($5.expr, $2.stmt, $1.loc);
+					}
+				;
 
 ForStmt         :	FOR '(' SimpleStmt ';' Expr ';'	SimpleStmt ')' Stmt
 					{
