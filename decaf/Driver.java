@@ -1,17 +1,13 @@
 package decaf;
 
 import java.io.IOException;
-<<<<<<< HEAD
 import java.io.PrintWriter;
-=======
->>>>>>> PA2
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import decaf.tree.Tree;
-<<<<<<< HEAD
 import decaf.backend.Mips;
 import decaf.dataflow.FlowGraph;
 import decaf.error.DecafError;
@@ -21,12 +17,6 @@ import decaf.machdesc.MachineDescription;
 import decaf.scope.ScopeStack;
 import decaf.tac.Functy;
 import decaf.translate.Translater;
-=======
-import decaf.error.DecafError;
-import decaf.frontend.Lexer;
-import decaf.frontend.Parser;
-import decaf.scope.ScopeStack;
->>>>>>> PA2
 import decaf.typecheck.BuildSym;
 import decaf.typecheck.TypeCheck;
 import decaf.utils.IndentPrintWriter;
