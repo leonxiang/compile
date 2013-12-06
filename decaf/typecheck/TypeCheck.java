@@ -319,7 +319,7 @@ public class TypeCheck extends Tree.Visitor {
 				issueError(new UndeclVarError(ident.getLocation(), ident.name));
 				ident.type = BaseType.ERROR;
 			} else if (v.isVariable()) {
-<<<<<<< HEAD
+			
 				Variable var = (Variable) v;
 				ident.type = var.getType();
 				ident.symbol = var;
