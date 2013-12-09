@@ -448,13 +448,18 @@ public class Translater {
 		Label loop = Label.createLabel();
 		Label exit = Label.createLabel();
 		Temp cond = Temp.createTempI4();
+		
 		Temp targetVp = genLoadVTable(c.getVtable());
 		Temp vp = genLoad(val, 0);
+		
 		genMark(loop);
+		
 		append(Tac.genEqu(cond, targetVp, vp));
 		genBnez(cond, exit);
+		
 		append(Tac.genLoad(vp, vp, Temp.createConstTemp(0)));
 		genBnez(vp, loop);
+		
 		Temp msg = genLoadStrConst(RuntimeError.CLASS_CAST_ERROR1);
 		genParm(msg);
 		genIntrinsicCall(Intrinsic.PRINT_STRING);
@@ -471,6 +476,8 @@ public class Translater {
 		genParm(msg);
 		genIntrinsicCall(Intrinsic.PRINT_STRING);
 		genIntrinsicCall(Intrinsic.HALT);
+		
 		genMark(exit);
+		
 	}
 }

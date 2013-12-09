@@ -20,7 +20,7 @@ public class BaseType extends Type {
 	
 	public static final BaseType VOID = new BaseType("void");
 
-	//leon 删去增加的double
+	//leon delete double added in PA2
 	//public static final BaseType DOUBLE = new BaseType("double");
 
 

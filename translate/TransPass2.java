@@ -222,11 +222,32 @@ public class TransPass2 extends Tree.Visitor {
 
 	@Override
 	public void visitPrint(Tree.Print printStmt) {
+		
+		
 		for (Tree.Expr r : printStmt.exprs) {
-			// TODO
+			// TODO Leon	
 			// Print支持三种类型的参数: bool/int/string，分别处理
+			r.accept(this);	
+			switch(r.type.toString()){
+			case "int":
+				tr.genParm(r.val);
+				tr.genIntrinsicCall(Intrinsic.PRINT_INT);
+				break;
+			case "bool":
+				tr.genParm(r.val);
+				tr.genIntrinsicCall(Intrinsic.PRINT_BOOL);
+				break;
+			case "string":
+				tr.genParm(r.val);
+				tr.genIntrinsicCall(Intrinsic.PRINT_STRING);
+				break;
+			default:
+				break;
+			}
 		}
+			
 	}
+	
 
 	@Override
 	public void visitIndexed(Tree.Indexed indexed) {
@@ -291,7 +312,33 @@ public class TransPass2 extends Tree.Visitor {
 
 	@Override
 	public void visitForLoop(Tree.ForLoop forLoop) {
-		// TODO: 参考visitWhileLoop
+		// TODO: 参考visitWhileLoop Leon
+		
+		if(forLoop.init != null)
+			forLoop.init.accept(this);
+		
+		Label loop = Label.createLabel();
+		
+		tr.genMark(loop);
+		forLoop.condition.accept(this);
+		
+		Label exit = Label.createLabel();
+		tr.genBeqz(forLoop.condition.val, exit);
+		loopExits.push(exit);
+		
+		if (forLoop.loopBody != null) {
+			forLoop.loopBody.accept(this);
+		}
+		
+		if(forLoop.update != null){
+			forLoop.update.accept(this);
+		}
+		
+		tr.genBranch(loop);
+		
+		loopExits.pop();
+		tr.genMark(exit);
+		
 	}
 
 	@Override
@@ -333,6 +380,7 @@ public class TransPass2 extends Tree.Visitor {
 		Label loop = Label.createLabel();
 		tr.genMark(loop);
 		whileLoop.condition.accept(this);
+		
 		Label exit = Label.createLabel();
 		tr.genBeqz(whileLoop.condition.val, exit);
 		loopExits.push(exit);
@@ -343,12 +391,57 @@ public class TransPass2 extends Tree.Visitor {
 		loopExits.pop();
 		tr.genMark(exit);
 	}
+	
+	/**
+	 * Leon add repeat loop
+	 */
+	public void visitRepeatLoop(Tree.RepeatLoop repeatLoop){
+		Label loop = Label.createLabel();
+		tr.genMark(loop);
+		
+		//得在循环体之前入栈，不然break语句时就不知道exit的Label在哪
+		Label exit = Label.createLabel();
+		loopExits.push(exit);
+		
+		if (repeatLoop.loopBody != null) {
+			repeatLoop.loopBody.accept(this);
+		}
+		repeatLoop.condition.accept(this);	
+		tr.genBnez(repeatLoop.condition.val, exit);//until 条件满足时跳出循环
+		tr.genBranch(loop);
+		
+		loopExits.pop();
+		tr.genMark(exit);
+	}
 
+	/**
+	 * Leon
+	 * add visit break
+	 *  for testcase t4, I add repeat loop, but break is not excecuted
+	 *  my v1 is tr.genBranch(loopExits.pop()); and in repeatLoop, we must push Label exit early 
+	 */
+	public void visitBreak(Tree.Break b){
+		
+		//System.out.println(">>>visitBreak");
+		if(!loopExits.empty()){
+			//System.out.println(loopExits.lastElement());
+			tr.genBranch(loopExits.peek());
+			
+		}
+	}
+	
 	//leon delete TypeTest
 
 	@Override
 	public void visitTypeCast(Tree.TypeCast typeCast) {
+		
 		typeCast.expr.accept(this);
 		// TODO 判断类型是否兼容，生成转换代码
+		//Leon
+		if (!typeCast.expr.type.compatible(typeCast.symbol.getType())){
+            tr.genClassCast(typeCast.expr.val, typeCast.symbol);
+       }
+       typeCast.val = typeCast.expr.val;
+
 	}
 }

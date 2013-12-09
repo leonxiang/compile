@@ -92,7 +92,7 @@ public abstract class Tree {
     /**
      * Repeat-loops, of type RepeatLoop
      */
-    public static final int REPEATLOOP=WHILELOOP+1;//leon 移植自PA2
+    public static final int REPEATLOOP=WHILELOOP+1;//leon from PA2
 
     /**
      * For-loops, of type ForLoop.
@@ -308,7 +308,7 @@ public abstract class Tree {
     public static final int INT = VOID + 1; 
     public static final int BOOL = INT + 1; 
     public static final int STRING = BOOL + 1; 
-	//leon 未接受PA2增加DOUBLE
+	//leon  delete DOUBLE added in PA2
 
     public Location loc;
     public Type type;
@@ -550,7 +550,7 @@ public abstract class Tree {
   
     /**
      * A repeat loop
-     * --Leon 移植自PA2
+     * --Leon  from PA2
      */
     public static class RepeatLoop extends Tree{
 
@@ -1244,7 +1244,7 @@ public abstract class Tree {
     		case BOOL:
     			pw.println("boolconst " + value);
     			break;
-			//leon 删去增加的double
+			//leon 删去锟斤拷锟接碉拷double
     		default:
     			pw.println("stringconst " + MiscUtils.quote((String)value));
     		}
@@ -1307,7 +1307,7 @@ public abstract class Tree {
     		case VOID:
     			pw.print("voidtype");
     			break;
-			//leon 删去增加的double
+			//leon remove double
     		default:
     			pw.print("stringtype");
     		}
