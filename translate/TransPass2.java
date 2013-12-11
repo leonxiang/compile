@@ -430,8 +430,8 @@ public class TransPass2 extends Tree.Visitor {
 		}
 	}
 	
-	//leon delete TypeTest
-
+	//Leon delete TypeTest
+	
 	@Override
 	public void visitTypeCast(Tree.TypeCast typeCast) {
 		

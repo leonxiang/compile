@@ -33,12 +33,15 @@ public class TransPass1 extends Tree.Visitor {
 			tr.createVTable(cd.symbol);
 			tr.genNewForClass(cd.symbol);
 		}
+		//Leon delete parent field in vtable
+		/*
 		for (Tree.ClassDef cd : program.classes) {
 			if (cd.parent != null) {
 				cd.symbol.getVtable().parent = cd.symbol.getParent()
 						.getVtable();
 			}
 		}
+		*/
 	}
 
 	@Override

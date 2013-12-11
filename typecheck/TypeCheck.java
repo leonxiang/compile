@@ -466,7 +466,7 @@ public class TypeCheck extends Tree.Visitor {
 
 	public void visitRepeatLoop(Tree.RepeatLoop repeatLoop) {
 		// TODO
-		// repeat循环。参考visitWhileLoop，自行修改Tree，
+		//repeat 循环。 参考visitWhileLoop
 		//Leon
 		breaks.add(repeatLoop);
 		if (repeatLoop.loopBody != null) {

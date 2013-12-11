@@ -46,11 +46,14 @@ public class Translater {
 	public void printTo(PrintWriter pw) {
 		for (VTable vt : vtables) {
 			pw.println("VTABLE(" + vt.name + ") {");
+			//Leon delete parent
+			 /*
 			if (vt.parent != null) {
 				pw.println("    " + vt.parent.name);
 			} else {
 				pw.println("    <empty>");
 			}
+			*/
 			pw.println("    " + vt.className);
 			for (Label l : vt.entries) {
 				pw.println("    " + l.name + ";");
